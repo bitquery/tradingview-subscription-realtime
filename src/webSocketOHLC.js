@@ -74,15 +74,15 @@ export function subscribeToWebSocket( onRealtimeCallback) {
     { next: onNext, error: console.error }
   );
 
-  // Process buffer every minute to emit the finalized OHLC bar
+   // Process buffer every minute to emit the finalized OHLC bar
   setInterval(() => {
     if (dataBuffer.length > 0) {
       processBuffer(onRealtimeCallback);
-      console.log("dataBuffer ",dataBuffer) // Emit the last processed bar
-      dataBuffer = []; // Clear the buffer
+      dataBuffer = lastBar ? [lastBar] : []; // Clear the buffer
     }
   }, BUFFER_TIMEOUT);
 }
+
 
 export function unsubscribeFromWebSocket() {
   if (client) {
