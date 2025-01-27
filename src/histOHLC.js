@@ -3,7 +3,7 @@ import axios from "axios";
 const endpoint = "https://streaming.bitquery.io/eap";
 const TOKEN_DETAILS = `
 {
-  Solana {
+  Solana(dataset: combined) {
     DEXTradeByTokens(
       orderBy: {descendingByField: "Block_Timefield"}
       where: {Trade: {Currency: {MintAddress: {is: "4Yx39Hkci49fdtyUGmrkDqTnVei9tmzPK9aac952xniv"}}, Side: {Currency: {MintAddress: {is: "So11111111111111111111111111111111111111112"}}}}}
