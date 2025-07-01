@@ -1,0 +1,69 @@
+# Node.js dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+build/
+public/
+out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Environment variables
+.env
+.env.* 
+
+# Optional coverage reports
+coverage/
+
+# Cache
+.cache/
+*.cache
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+jest-html-reporters-*.html
+test-results/
+
+# Misc
+*.tgz
+*.zip
+
+# Ignore TV-specific build artifacts (if applicable)
+tv-build/
+tv-dist/
+tv-output/
+
+# Storybook
+storybook-static/
+
+# ESLint cache
+.eslintcache
+
+# Mac system files
+*.DS_Store
+
+# Production secrets (if any)
+secrets.json
+/src/charting_library
+/src/datafeeds
+
