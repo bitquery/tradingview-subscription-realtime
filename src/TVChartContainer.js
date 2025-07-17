@@ -1,50 +1,69 @@
-// TVChartContainer.js
 import React, { useEffect, useRef } from "react";
-import { widget } from "./charting_library"; // Ensure this is the correct path
+import { widget } from "./charting_library";
 import Datafeed from "./custom_datafeed";
 
 const TVChartContainer = () => {
   const chartContainerRef = useRef(null);
-  console.log("TVChartContainer called.");
-  useEffect(() => {
-    console.log("TVChartContainer useEffect called.");
 
+  useEffect(() => {
     const widgetOptions = {
       symbol: "BananaCat (BCAT)",
       datafeed: Datafeed,
-      interval: ["1"],
+      interval: "15",
       container: chartContainerRef.current,
-      library_path: "/charting_library/", // Ensure this path is correct
+      library_path: "/charting_library/",
       locale: "en",
-      disabled_features: ["use_localstorage_for_settings"],
-      enabled_features: ["study_templates"],
-      charts_storage_url: "https://saveload.tradingview.com",
-      charts_storage_api_version: "1.1",
-      client_id: "tradingview.com",
-      user_id: "public_user_id",
+      theme: "dark",
       fullscreen: false,
       autosize: true,
-      studies_overrides: {},
-      debug: true,
-      chartType: 1,
-      supports_marks: true,
-      supports_timescale_marks: true,
-      supported_resolutions: ["1", "5", "15", "30", "60", "1D", "1W", "1M"],
-      supported_intervals: ["1", "5", "15", "30", "60", "1D", "1W", "1M"],
-      theme: "dark",
-      pricescale: 1000,
-      data_status: "streaming",
-      overrides: {
-        "mainSeriesProperties.statusViewStyle.showInterval": true,
-        "mainSeriesProperties.statusViewStyle.symbolTextSource": "ticker",
-        "mainSeriesProperties.priceAxisProperties.indexedTo100": true, // Since prices are very small, for demo we are indexing it to 100 https://www.tradingview.com/charting-library-docs/latest/api/interfaces/Charting_Library.ChartPropertiesOverrides#properties
+
+      disabled_features: [
+        "header_symbol_search",
+        "header_compare",
+        "header_saveload",
+        "timeframes_toolbar",
+        "volume_force_overlay",
+        "show_interval_dialog_on_key_press",
+      ],
+
+      enabled_features: [
+        "study_templates",
+        "left_toolbar",
+        "countdown",
+      ],
+
+      studies_overrides: {
+        "volume.volume.color.0": "#ef5350",
+        "volume.volume.color.1": "#26a69a",
+        "volume.volume.transparency": 70,
       },
+
+      overrides: {
+        "paneProperties.background": "#1E1E1E",
+        "paneProperties.vertGridProperties.color": "#2E2E2E",
+        "paneProperties.horzGridProperties.color": "#2E2E2E",
+        "symbolWatermarkProperties.color": "rgba(0, 0, 0, 0)",
+      
+        "scalesProperties.lineColor": "#555",
+        "scalesProperties.textColor": "#FFFFFF",  // Bright white for better visibility
+      
+        "mainSeriesProperties.candleStyle.upColor": "#26a69a",
+        "mainSeriesProperties.candleStyle.downColor": "#ef5350",
+        "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350",
+        "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
+      },
+
+      supported_resolutions: ["1", "5", "15", "30", "60", "1D", "1W", "1M"],
+      time_scale: {
+        min_bar_spacing: 2,
+      },
+
+      debug: false,
     };
 
-    console.log("widgetOptions:", widgetOptions);
-
     const tvWidget = new widget(widgetOptions);
-    console.log("TradingView widget initialized.", tvWidget);
 
     tvWidget.onChartReady(() => {
       console.log("Chart has loaded!");
@@ -55,7 +74,6 @@ const TVChartContainer = () => {
       priceScale.setAutoScale(true);
     });
 
-    // Cleanup function to remove the widget on component unmount
     return () => {
       if (tvWidget) {
         console.log("Removing TradingView widget.");

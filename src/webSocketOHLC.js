@@ -1,16 +1,16 @@
 import { createClient } from 'graphql-ws';
-
+import {authtoken} from 'configs';
 let client;
 let lastBar = null;
 let dataBuffer = [];
 const BUFFER_TIMEOUT = 60000; // 1 minute interval for OHLC calculation
-const BITQUERY_ENDPOINT = 'wss://streaming.bitquery.io/eap?token=ory_...';
+const BITQUERY_ENDPOINT = 'wss://streaming.bitquery.io/eap?token=' + authtoken;
 
 const subscriptionQuery = `
 subscription {
   Solana {
     DEXTrades(
-      where: {Trade: {Buy: {Currency: {MintAddress: {is: "4Yx39Hkci49fdtyUGmrkDqTnVei9tmzPK9aac952xniv"}}}, Sell: {Currency: {MintAddress: {is: "So11111111111111111111111111111111111111112"}}}}}
+      where: {Trade: {Buy: {Currency: {MintAddress: {is: "GSdtu9Nm7kZ1x8ddtisXFthzxFM5CmuMrSnBFfnHokm6"}}}, Sell: {Currency: {MintAddress: {is: "So11111111111111111111111111111111111111112"}}}}}
     ) {
       Trade {
         Buy {

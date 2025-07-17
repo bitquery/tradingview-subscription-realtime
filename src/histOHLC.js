@@ -1,12 +1,12 @@
 import axios from "axios";
-
+import {authtoken} from 'configs';
 const endpoint = "https://streaming.bitquery.io/eap";
 const TOKEN_DETAILS = `
 {
   Solana(dataset: combined) {
     DEXTradeByTokens(
       orderBy: {descendingByField: "Block_Timefield"}
-      where: {Trade: {Currency: {MintAddress: {is: "4Yx39Hkci49fdtyUGmrkDqTnVei9tmzPK9aac952xniv"}}, Side: {Currency: {MintAddress: {is: "So11111111111111111111111111111111111111112"}}}}}
+      where: {Trade: {Currency: {MintAddress: {is: "GSdtu9Nm7kZ1x8ddtisXFthzxFM5CmuMrSnBFfnHokm6"}}, Side: {Currency: {MintAddress: {is: "So11111111111111111111111111111111111111112"}}}}}
       limit: {count: 1000}
     ) {
       Block {
@@ -34,8 +34,8 @@ export async function fetchHistoricalData(from) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "Bearer ory_a...",
+          Authorization: `Bearer ${authtoken}`,
+            
         },
       }
     );

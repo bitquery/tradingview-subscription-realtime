@@ -67,3 +67,4 @@ secrets.json
 /src/charting_library
 /src/datafeeds
 
+src/configs.json
