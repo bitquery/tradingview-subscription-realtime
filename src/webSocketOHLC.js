@@ -1,10 +1,11 @@
 import { createClient } from 'graphql-ws';
-import {authtoken} from 'configs';
+import config from "./configs.json";
+
 let client;
 let lastBar = null;
 let dataBuffer = [];
 const BUFFER_TIMEOUT = 60000; // 1 minute interval for OHLC calculation
-const BITQUERY_ENDPOINT = 'wss://streaming.bitquery.io/eap?token=' + authtoken;
+const BITQUERY_ENDPOINT = 'wss://streaming.bitquery.io/eap?token=' + config.authtoken;
 
 const subscriptionQuery = `
 subscription {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {authtoken} from 'configs';
+import config from "./configs.json";
 const endpoint = "https://streaming.bitquery.io/eap";
 const TOKEN_DETAILS = `
 {
@@ -34,7 +34,7 @@ export async function fetchHistoricalData(from) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authtoken}`,
+          Authorization: `Bearer ${config.authtoken}`,
             
         },
       }

@@ -6,9 +6,20 @@ const TVChartContainer = () => {
   const chartContainerRef = useRef(null);
 
   useEffect(() => {
+    // Extract base and quote from URL (as mint addresses)
+    const urlParams = new URLSearchParams(window.location.search);
+    const baseMint = urlParams.get("base");
+    const quoteMint = urlParams.get("quote");
+
+    const displaySymbol = `${baseMint}/${quoteMint}`; // fallback to mints as symbol name
+
     const widgetOptions = {
-      symbol: "BananaCat (BCAT)",
-      datafeed: Datafeed,
+      symbol: displaySymbol,
+      datafeed: {
+        ...Datafeed,
+        baseMint,
+        quoteMint,
+      },
       interval: "15",
       container: chartContainerRef.current,
       library_path: "/charting_library/",
@@ -26,11 +37,7 @@ const TVChartContainer = () => {
         "show_interval_dialog_on_key_press",
       ],
 
-      enabled_features: [
-        "study_templates",
-        "left_toolbar",
-        "countdown",
-      ],
+      enabled_features: ["study_templates", "left_toolbar", "countdown"],
 
       studies_overrides: {
         "volume.volume.color.0": "#ef5350",
@@ -43,10 +50,10 @@ const TVChartContainer = () => {
         "paneProperties.vertGridProperties.color": "#2E2E2E",
         "paneProperties.horzGridProperties.color": "#2E2E2E",
         "symbolWatermarkProperties.color": "rgba(0, 0, 0, 0)",
-      
+
         "scalesProperties.lineColor": "#555",
-        "scalesProperties.textColor": "#FFFFFF",  // Bright white for better visibility
-      
+        "scalesProperties.textColor": "#FFFFFF",
+
         "mainSeriesProperties.candleStyle.upColor": "#26a69a",
         "mainSeriesProperties.candleStyle.downColor": "#ef5350",
         "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a",
@@ -67,16 +74,10 @@ const TVChartContainer = () => {
 
     tvWidget.onChartReady(() => {
       console.log("Chart has loaded!");
-      const priceScale = tvWidget
-        .activeChart()
-        .getPanes()[0]
-        .getMainSourcePriceScale();
-      priceScale.setAutoScale(true);
     });
 
     return () => {
       if (tvWidget) {
-        console.log("Removing TradingView widget.");
         tvWidget.remove();
       }
     };
