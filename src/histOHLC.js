@@ -3,26 +3,58 @@ import config from "./configs.json";
 const endpoint = "https://streaming.bitquery.io/eap";
 const TOKEN_DETAILS = `
 {
-  Solana(dataset: combined) {
-    DEXTradeByTokens(
-      orderBy: {descendingByField: "Block_Timefield"}
-      where: {Trade: {Currency: {MintAddress: {is: "GSdtu9Nm7kZ1x8ddtisXFthzxFM5CmuMrSnBFfnHokm6"}}, Side: {Currency: {MintAddress: {is: "So11111111111111111111111111111111111111112"}}}}}
-      limit: {count: 1000}
-    ) {
-      Block {
-        Timefield: Time(interval: {in: minutes, count: 1})
+    Trading {
+      Tokens(
+        where: {Token: {Network: {is: "Solana"}, Address: {is: "6ft9XJZX7wYEH1aywspW5TiXDcshGc2W2SqBHN9SLAEJ"}}, Interval: {Time: {Duration: {eq: 60}}}}
+        orderBy: {descending: Block_Time}
+        limit: {count: 10000}
+      ) {
+        Token {
+          Address
+          Id
+          IsNative
+          Name
+          Network
+          Name
+          Symbol
+          TokenId
+        }
+        Block {
+          Date
+          Time
+          Timestamp
+        }
+        Interval {
+          Time {
+            Start
+            Duration
+            End
+          }
+        }
+        Volume {
+          Base
+          Quote
+          Usd
+        }
+        Price {
+          IsQuotedInUsd
+          Ohlc {
+            Close
+            High
+            Low
+            Open
+          }
+          Average {
+            ExponentialMoving
+            Mean
+            SimpleMoving
+            WeightedSimpleMoving
+          }
+        }
       }
-      volume: sum(of: Trade_Amount)
-      Trade {
-        high: Price(maximum: Trade_Price)
-        low: Price(minimum: Trade_Price)
-        open: Price(minimum: Block_Slot)
-        close: Price(maximum: Block_Slot)
-      }
-      count
     }
   }
-}
+  
 `;
 
 export async function fetchHistoricalData(from) {
@@ -40,21 +72,20 @@ export async function fetchHistoricalData(from) {
       }
     );
     console.log("API called");
-    const trades = response.data.data.Solana.DEXTradeByTokens;
+    const trades = response.data.data.Trading.Tokens;
 
     // Preprocess the bars data
     let bars = trades.map((trade) => {
       // Parse and convert Block Timefield to Unix timestamp in milliseconds
-      const blockTime = new Date(trade.Block.Timefield).getTime();
+      const blockTime = new Date(trade.Block.Time).getTime();
 
       return {
         time: blockTime, // Time in Unix timestamp (milliseconds)
-        open: trade.Trade.open || 0,
-        high: trade.Trade.high || 0,
-        low: trade.Trade.low || 0,
-        close: trade.Trade.close || 0,
-        volume: trade.volume || 0,
-        count: trade.count || 0, // Trade count for additional info
+        open: trade.Price.Ohlc.Open || 0,
+        high: trade.Price.Ohlc.High || 0,
+        low: trade.Price.Ohlc.Low || 0,
+        close: trade.Price.Ohlc.Close || 0,
+        volume: trade.Volume.Base || 0,
       };
     });
 

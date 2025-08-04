@@ -20,7 +20,7 @@ const TVChartContainer = () => {
         baseMint,
         quoteMint,
       },
-      interval: "15",
+      interval: "1",
       container: chartContainerRef.current,
       library_path: "/charting_library/",
       locale: "en",
@@ -60,6 +60,8 @@ const TVChartContainer = () => {
         "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350",
         "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
         "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
+        "priceScale.autoScale": true,
+        "priceScale.lockScale": false,
       },
 
       supported_resolutions: ["1", "5", "15", "30", "60", "1D", "1W", "1M"],
@@ -74,6 +76,8 @@ const TVChartContainer = () => {
 
     tvWidget.onChartReady(() => {
       console.log("Chart has loaded!");
+      const priceScale = widget.activeChart().getPanes()[0].getRightPriceScales()[0];
+    priceScale.setVisiblePriceRange({ "from": 0.00001, "to": 0.0001 });
     });
 
     return () => {
@@ -84,7 +88,7 @@ const TVChartContainer = () => {
   }, []);
 
   return (
-    <div ref={chartContainerRef} style={{ height: "600px", width: "100%" }} />
+    <div ref={chartContainerRef} style={{ height: "800px", width: "100%" }} />
   );
 };
 

@@ -9,21 +9,56 @@ const BITQUERY_ENDPOINT = 'wss://streaming.bitquery.io/eap?token=' + config.auth
 
 const subscriptionQuery = `
 subscription {
-  Solana {
-    DEXTrades(
-      where: {Trade: {Buy: {Currency: {MintAddress: {is: "GSdtu9Nm7kZ1x8ddtisXFthzxFM5CmuMrSnBFfnHokm6"}}}, Sell: {Currency: {MintAddress: {is: "So11111111111111111111111111111111111111112"}}}}}
+  Trading {
+    Tokens(
+      where: {Token: {Network: {is: "Solana"}, Address: {is: "6ft9XJZX7wYEH1aywspW5TiXDcshGc2W2SqBHN9SLAEJ"}}, Interval: {Time: {Duration: {eq: 60}}}}
     ) {
-      Trade {
-        Buy {
-          Price
-        }
+      Token {
+        Address
+        Id
+        IsNative
+        Name
+        Network
+        Name
+        Symbol
+        TokenId
       }
       Block {
+        Date
         Time
+        Timestamp
+      }
+      Interval {
+        Time {
+          Start
+          Duration
+          End
+        }
+      }
+      Volume {
+        Base
+        Quote
+        Usd
+      }
+      Price {
+        IsQuotedInUsd
+        Ohlc {
+          Close
+          High
+          Low
+          Open
+        }
+        Average {
+          ExponentialMoving
+          Mean
+          SimpleMoving
+          WeightedSimpleMoving
+        }
       }
     }
   }
 }
+
 `;
 
 function processBuffer(callback) {
@@ -39,9 +74,9 @@ export function subscribeToWebSocket( onRealtimeCallback) {
   });
 
   const onNext = (data) => {
-    const trade = data.data.Solana.DEXTrades[0];
+    const trade = data.data.Trading.Tokens[0];
     const tradeTime = new Date(trade.Block.Time).getTime();
-    const price = parseFloat(trade.Trade.Buy.Price);
+   
 
     // Round the time to the nearest minute
     const roundedTime = Math.floor(tradeTime / 60000) * 60000;
@@ -54,18 +89,18 @@ export function subscribeToWebSocket( onRealtimeCallback) {
 
       lastBar = {
         time: roundedTime,
-        open: price,
-        high: price,
-        low: price,
-        close: price,
+        open: trade.Price.Ohlc.Open,
+        high: trade.Price.Ohlc.High,
+        low: trade.Price.Ohlc.Low,
+        close: trade.Price.Ohlc.Close,
         volume: 1, // Can modify to include volume data if available
       };
       console.log("lastBar",lastBar)
     } else {
       // Update the OHLC data for the current minute
-      lastBar.high = Math.max(lastBar.high, price);
-      lastBar.low = Math.min(lastBar.low, price);
-      lastBar.close = price;
+      lastBar.high = Math.max(lastBar.high, trade.Price.Ohlc.High);
+      lastBar.low = Math.min(lastBar.low, trade.Price.Ohlc.Low);
+      lastBar.close = trade.Price.Close;
       lastBar.volume += 1; // Increment trade count (or add volume if applicable)
     }
   };
