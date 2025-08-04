@@ -76,8 +76,7 @@ const TVChartContainer = () => {
 
     tvWidget.onChartReady(() => {
       console.log("Chart has loaded!");
-      const priceScale = widget.activeChart().getPanes()[0].getRightPriceScales()[0];
-    priceScale.setVisiblePriceRange({ "from": 0.00001, "to": 0.0001 });
+     
     });
 
     return () => {

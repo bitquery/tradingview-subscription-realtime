@@ -24,7 +24,7 @@ export const resolveSymbol = (
       session: "24x7",
       timezone: "Etc/UTC",
       minmov: 1,
-      pricescale: 1000,
+      pricescale: 100000000,
       has_intraday: true,
       intraday_multipliers: ["1", "5", "15", "30", "60"],
       has_empty_bars: false,
