@@ -13,7 +13,7 @@ subscription {
           Network: {is: "Solana"},
           Address: {is: "6ft9XJZX7wYEH1aywspW5TiXDcshGc2W2SqBHN9SLAEJ"}
         },
-        Interval: {Time: {Duration: {eq: 1}}}
+        Interval: {Time: {Duration: {eq: 60}}}
       }
     ) {
       Block {
