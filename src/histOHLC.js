@@ -1,64 +1,71 @@
 import axios from "axios";
 import config from "./configs.json";
 const endpoint = "https://streaming.bitquery.io/eap";
+
+const urlParams = new URLSearchParams(window.location.search);
+const baseMint = urlParams.get("base");
+console.log("Base Mint:", baseMint);
 const TOKEN_DETAILS = `
 {
-    Trading {
-      Tokens(
-        where: {Token: {Network: {is: "Solana"}, Address: {is: "So11111111111111111111111111111111111111112"}}, Interval: {Time: {Duration: {eq: 60}}}}
-        orderBy: {descending: Block_Time}
-        limit: {count: 10000}
-      ) {
-        Token {
-          Address
-          Id
-          IsNative
-          Name
-          Network
-          Name
-          Symbol
-          TokenId
+  Trading {
+    Tokens(
+      where: {Token: {Network: {is: "Solana"}, Address: {is: "${baseMint}"}}, Interval: {Time: {Duration: {eq: 60}}}}
+      orderBy: {descending: Block_Time}
+      limit: {count: 10000}
+    ) {
+      Token {
+        Address
+        Id
+        IsNative
+        Name
+        Network
+        Symbol
+        TokenId
+      }
+      Block {
+        Date
+        Time
+        Timestamp
+      }
+      Interval {
+        Time {
+          Start
+          Duration
+          End
         }
-        Block {
-          Date
-          Time
-          Timestamp
+      }
+      Volume {
+        Base
+        Quote
+        Usd
+      }
+      Price {
+        IsQuotedInUsd
+        Ohlc {
+          Close
+          High
+          Low
+          Open
         }
-        Interval {
-          Time {
-            Start
-            Duration
-            End
-          }
-        }
-        Volume {
-          Base
-          Quote
-          Usd
-        }
-        Price {
-          IsQuotedInUsd
-          Ohlc {
-            Close
-            High
-            Low
-            Open
-          }
-          Average {
-            ExponentialMoving
-            Mean
-            SimpleMoving
-            WeightedSimpleMoving
-          }
+        Average {
+          ExponentialMoving
+          Mean
+          SimpleMoving
+          WeightedSimpleMoving
         }
       }
     }
   }
-  
+}
+
 `;
 
 export async function fetchHistoricalData(from) {
+
+
+
   const requiredBars = 360; // Hardcoding the value
+  console.log("query",TOKEN_DETAILS)
   try {
     const response = await axios.post(
       endpoint,
@@ -71,7 +78,7 @@ export async function fetchHistoricalData(from) {
         },
       }
     );
-    console.log("API called");
+    console.log("API called",response);
     const trades = response.data.data.Trading.Tokens;
 
     // Preprocess the bars data

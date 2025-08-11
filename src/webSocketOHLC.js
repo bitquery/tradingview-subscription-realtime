@@ -3,7 +3,9 @@ import config from "./configs.json";
 
 let client;
 const BITQUERY_ENDPOINT = 'wss://streaming.bitquery.io/eap?token=' + config.authtoken;
-
+const urlParams = new URLSearchParams(window.location.search);
+const baseMint = urlParams.get("base");
+console.log("Base Mint:", baseMint);
 const subscriptionQuery = `
 subscription {
   Trading {
@@ -11,7 +13,7 @@ subscription {
       where: {
         Token: {
           Network: {is: "Solana"},
-          Address: {is: "So11111111111111111111111111111111111111112"}
+          Address: {is: "${baseMint}"}
         },
         Interval: {Time: {Duration: {eq: 60}}}
       }
