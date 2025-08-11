@@ -11,7 +11,7 @@ subscription {
       where: {
         Token: {
           Network: {is: "Solana"},
-          Address: {is: "6ft9XJZX7wYEH1aywspW5TiXDcshGc2W2SqBHN9SLAEJ"}
+          Address: {is: "So11111111111111111111111111111111111111112"}
         },
         Interval: {Time: {Duration: {eq: 60}}}
       }
@@ -39,7 +39,7 @@ export function subscribeToWebSocket(onRealtimeCallback) {
   client = createClient({ url: BITQUERY_ENDPOINT });
 
   const onNext = (data) => {
-    console.log("subscription called")
+    // console.log("subscription called")
     const tokenData = data.data?.Trading?.Tokens?.[0];
     if (!tokenData) return;
 
