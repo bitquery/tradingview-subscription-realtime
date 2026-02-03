@@ -9,7 +9,7 @@ const TOKEN_DETAILS = `
 {
   Trading {
     Tokens(
-      where: {Token: {Network: {is: "Solana"}, Address: {is: "${baseMint}"}}, Interval: {Time: {Duration: {eq: 60}}}}
+      where: {Token: {Network: {is: "Solana"}, Address: {is: "${baseMint}"}}, Interval: {Time: {Duration: {eq: 60}}}, Block: {Date: {since_relative: {days_ago: 1}}}}
       orderBy: {descending: Block_Time}
       limit: {count: 10000}
     ) {
