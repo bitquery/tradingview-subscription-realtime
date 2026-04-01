@@ -1,5 +1,16 @@
 const configurationData = {
-    supported_resolutions: ['1', '5', '15', '30', '60', '1D', '1W', '1M'],
+    supported_resolutions: [
+      "10S",
+      "1",
+      "5",
+      "10",
+      "15",
+      "30",
+      "60",
+      "1D",
+      "1W",
+      "1M",
+    ],
     // ... other configuration data
   };
   

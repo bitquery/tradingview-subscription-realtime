@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "./configs.json";
+import { connectBarContinuity } from "./barContinuity";
 const endpoint = "https://streaming.bitquery.io/eap";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -9,7 +10,7 @@ const TOKEN_DETAILS = `
 {
   Trading {
     Tokens(
-      where: {Token: {Network: {is: "Solana"}, Address: {is: "${baseMint}"}}, Interval: {Time: {Duration: {eq: 60}}}, Block: {Date: {since_relative: {days_ago: 1}}}}
+      where: {Token: {Network: {is: "Solana"}, Address: {is: "${baseMint}"}}, Interval: {Time: {Duration: {eq: 1}}}, Block: {Date: {since_relative: {days_ago: 1}}}}
       orderBy: {descending: Block_Time}
       limit: {count: 10000}
     ) {
@@ -61,11 +62,8 @@ const TOKEN_DETAILS = `
 `;
 
 export async function fetchHistoricalData(from) {
-
-
-
   const requiredBars = 360; // Hardcoding the value
-  console.log("query",TOKEN_DETAILS)
+  console.log("query", TOKEN_DETAILS);
   try {
     const response = await axios.post(
       endpoint,
@@ -74,11 +72,10 @@ export async function fetchHistoricalData(from) {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${config.authtoken}`,
-            
         },
       }
     );
-    console.log("API called",response);
+    console.log("API called", response);
     const trades = response.data.data.Trading.Tokens;
 
     // Preprocess the bars data
@@ -98,6 +95,7 @@ export async function fetchHistoricalData(from) {
 
     // Sort bars in ascending order by time (since the API returned descending order)
     bars.sort((a, b) => a.time - b.time);
+    connectBarContinuity(bars);
 
     // Fill in missing bars if needed to reach 300 bars
     if (bars.length < requiredBars) {
@@ -113,7 +111,7 @@ export async function fetchHistoricalData(from) {
           low: 0,
           close: 0,
           volume: 0,
-          count: 0
+          count: 0,
         });
       }
     }

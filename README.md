@@ -16,8 +16,7 @@ This project integrates **TradingView's Advanced Charts** with **Bitquery's Trad
 - Support for multiple blockchains (Solana, Ethereum, BSC, Base, Polygon, Tron)
 - Live price streaming via WebSocket subscriptions
 - Support for DEX-specific data (Pump.fun, Raydium, Uniswap, PancakeSwap, etc.)
-- Customizable base and quote token pairs
-- USD or quote currency pricing
+- Per-token charts via base mint (OHLC quoted in USD via the Trading API)
 - Volume and moving averages (SMA, EMA)
 
 ---
@@ -48,15 +47,14 @@ npm start
 
 ### 2. Test with token addresses
 
-Pass the base and quote token addresses as URL parameters:
+Pass the token mint address as the `base` URL parameter (values are in USD):
 
 ```
-http://localhost:3000/?base=So11111111111111111111111111111111111111112&quote=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+http://localhost:3000/?base=So11111111111111111111111111111111111111112
 ```
 
-**Example Parameters:**
-- `base`: SOL token address (So11111111111111111111111111111111111111112)
-- `quote`: USDC token address (EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v)
+**Example parameter:**
+- `base`: token mint address (example: SOL wrapped — So11111111111111111111111111111111111111112)
 
 ---
 

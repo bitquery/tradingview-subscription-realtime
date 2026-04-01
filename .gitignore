@@ -66,5 +66,9 @@ storybook-static/
 secrets.json
 /src/charting_library
 /src/datafeeds
+/public/charting_library
+/public/datafeeds
 
 src/configs.json
+
+.env

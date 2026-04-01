@@ -38,16 +38,9 @@ export const subscribeBars = (
   subscriberUID,
   onResetCacheNeededCallback
 ) => {
-  // this.subscribers[subscriberUID] = {
-  //   callback: onRealtimeCallback,
-  //   resolution: resolution,
-  // };
   subscribeToWebSocket(onRealtimeCallback);
 };
 
 export const unsubscribeBars = (subscriberUID) => {
   delete this.subscribers[subscriberUID];
-  // if (Object.keys(this.subscribers).length === 0) {
-  //   unsubscribeFromWebSocket();
-  // }
 };

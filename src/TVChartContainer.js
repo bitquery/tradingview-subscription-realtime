@@ -6,19 +6,16 @@ const TVChartContainer = () => {
   const chartContainerRef = useRef(null);
 
   useEffect(() => {
-    // Extract base and quote from URL (as mint addresses)
     const urlParams = new URLSearchParams(window.location.search);
     const baseMint = urlParams.get("base");
-    const quoteMint = urlParams.get("quote");
 
-    const displaySymbol = `${baseMint}/${quoteMint}`; // fallback to mints as symbol name
+    const displaySymbol = baseMint ?? "";
 
     const widgetOptions = {
       symbol: displaySymbol,
       datafeed: {
         ...Datafeed,
         baseMint,
-        quoteMint,
       },
       interval: "1",
       container: chartContainerRef.current,
@@ -37,7 +34,12 @@ const TVChartContainer = () => {
         "show_interval_dialog_on_key_press",
       ],
 
-      enabled_features: ["study_templates", "left_toolbar", "countdown"],
+      enabled_features: [
+        "study_templates",
+        "left_toolbar",
+        "countdown",
+        "seconds_resolution",
+      ],
 
       studies_overrides: {
         "volume.volume.color.0": "#ef5350",
@@ -64,7 +66,18 @@ const TVChartContainer = () => {
         "priceScale.lockScale": false,
       },
 
-      supported_resolutions: ["1", "5", "15", "30", "60", "1D", "1W", "1M"],
+      supported_resolutions: [
+        "10S",
+        "1",
+        "5",
+        "10",
+        "15",
+        "30",
+        "60",
+        "1D",
+        "1W",
+        "1M",
+      ],
       time_scale: {
         min_bar_spacing: 2,
       },
