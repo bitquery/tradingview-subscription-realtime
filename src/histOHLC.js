@@ -1,7 +1,7 @@
 import axios from "axios";
 import config from "./configs.json";
 import { connectBarContinuity } from "./barContinuity";
-const endpoint = "https://streaming.bitquery.io/eap";
+const endpoint = "https://streaming.bitquery.io/graphql";
 
 const urlParams = new URLSearchParams(window.location.search);
 const baseMint = urlParams.get("base");
